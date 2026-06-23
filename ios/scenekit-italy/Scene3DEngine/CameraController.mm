@@ -54,6 +54,9 @@
         SCNLookAtConstraint *constraint = [SCNLookAtConstraint lookAtConstraintWithTarget:self.targetNode];
         constraint.gimbalLockEnabled = YES;
         self.cameraNode.constraints = @[constraint];
+
+        // Explicitly set pointOfView so SceneKit always finds the camera
+        sceneView.pointOfView = self.cameraNode;
     }
 
     // Update target position

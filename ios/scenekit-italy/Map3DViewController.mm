@@ -92,6 +92,16 @@
 
     self.scene = scene;
     self.sceneView.scene = scene;
+
+    // DEBUG: red cube at origin to verify rendering works
+    SCNBox *debugBox = [SCNBox boxWithWidth:10 height:10 length:10 chamferRadius:0];
+    SCNMaterial *redMat = [SCNMaterial material];
+    redMat.diffuse.contents = [UIColor redColor];
+    debugBox.materials = @[redMat];
+    SCNNode *debugNode = [SCNNode nodeWithGeometry:debugBox];
+    debugNode.position = SCNVector3Make(0, 5, 0);
+    debugNode.name = @"debugCube";
+    [scene.rootNode addChildNode:debugNode];
 }
 
 // ---------------------------------------------------------------------------
