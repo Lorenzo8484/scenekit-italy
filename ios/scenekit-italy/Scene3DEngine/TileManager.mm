@@ -28,11 +28,20 @@ static const double kOriginLon = 11.34;
 #pragma mark - Helpers
 // ---------------------------------------------------------------------------
 
-// Tile key from lat/lon
+// Tile key from lat/lon — matches preprocessor format: tile_+LON_LAT.stile
+// Uses INTEGER arithmetic to avoid floating-point precision issues
+// kTileSizeDeg = 0.01, so we work in centidegrees (×100)
 static NSString *TileKey(double lat, double lon) {
-    int tileLat = (int)floor(lat / kTileSizeDeg);
-    int tileLon = (int)floor(lon / kTileSizeDeg);
-    return [NSString stringWithFormat:@"%+03d_%+04d", tileLon, tileLat];
+    int tileSizeInt = (int)(kTileSizeDeg * 100.0 + 0.5); // 1 centidegree
+    int tileLon = (int)(lon * 100.0 + 0.0001); // centidegrees with tiny epsilon
+    int tileLat = (int)(lat * 100.0 + 0.0001);
+    // Floor to tile grid
+    tileLon = (tileLon / tileSizeInt) * tileSizeInt;
+    tileLat = (tileLat / tileSizeInt) * tileSizeInt;
+    // Format as +LL.LL_+LL.LL (integer parts = /100, fractional = %100)
+    return [NSString stringWithFormat:@"%c%d.%02d_%c%d.%02d",
+            tileLon >= 0 ? '+' : '-', abs(tileLon) / 100, abs(tileLon) % 100,
+            tileLat >= 0 ? '+' : '-', abs(tileLat) / 100, abs(tileLat) % 100];
 }
 
 // Scene coordinate conversion

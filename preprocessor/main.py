@@ -354,9 +354,18 @@ def main(argv: Optional[list[str]] = None) -> int:
             log.error("Invalid tile format: '%s'.  Use --tile LAT,LON", args.tile)
             return 1
 
-        # Create a tile-sized bounding box around the given point
-        half = TILE_SIZE / 2
-        bbox = (lon - half, lat - half, lon + half, lat + half)
+        # Retrieve tile coordinates from LAT,LON
+        # Use centidegree integer math to avoid floating-point precision issues
+        tile_size_cd = int(TILE_SIZE * 100 + 0.5)  # 1 centidegree
+        tile_lat = int(lat * 100 + 0.0001)  # centidegrees with epsilon
+        tile_lon = int(lon * 100 + 0.0001)
+        # Floor to tile grid using integer division
+        tile_lat = (tile_lat // tile_size_cd) * tile_size_cd
+        tile_lon = (tile_lon // tile_size_cd) * tile_size_cd
+        # Convert back to degrees via integer → float
+        lon_min = tile_lon / 100.0
+        lat_min = tile_lat / 100.0
+        bbox = (lon_min, lat_min, lon_min + TILE_SIZE, lat_min + TILE_SIZE)
         path = generate_tile(bbox, **tile_kwargs)
         return 0 if path else 1
 
