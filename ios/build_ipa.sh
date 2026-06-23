@@ -31,7 +31,12 @@ CFLAGS=(
 echo "📦 Compiling sources..."
 cd "$OBJ_DIR"
 
-for f in "AppDelegate.m" "main.m" "MapViewController.mm"; do
+for f in main.m AppDelegate.m \
+         MapViewController.mm \
+         SettingsViewController.mm \
+         BusViewController.mm \
+         SettingsStore.mm \
+         LocalizationManager.mm; do
     echo "   $f"
     $CLANG "${CFLAGS[@]}" "$SRC_DIR/$f" -o "$(basename "${f%.*}").o"
 done
@@ -49,12 +54,24 @@ $LLD -demangle \
   -framework CoreLocation \
   -framework WebKit \
   -framework AVFoundation \
+  -framework SceneKit \
+  -framework ModelIO \
   *.o \
   -o "$APP_DIR/Navigatore"
 
 echo "📱 Creating .app bundle..."
 cp "$SRC_DIR/Info.plist" "$APP_DIR/"
 cp "$SRC_DIR/map.html" "$APP_DIR/"
+
+# Copy assets
+if [ -d "$SRC_DIR/assets" ]; then
+    cp -r "$SRC_DIR/assets" "$APP_DIR/"
+fi
+
+# Copy any .stile tiles if present
+if [ -d "$SRC_DIR/tiles" ]; then
+    cp -r "$SRC_DIR/tiles" "$APP_DIR/" 2>/dev/null || true
+fi
 
 plutil -replace CFBundleShortVersionString -string "$VERSION" "$APP_DIR/Info.plist" 2>/dev/null || true
 plutil -replace CFBundleVersion -string "$VERSION" "$APP_DIR/Info.plist" 2>/dev/null || true

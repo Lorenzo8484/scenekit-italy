@@ -5,8 +5,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    MapViewController *vc = [[MapViewController alloc] init];
-    self.window.rootViewController = vc;
+    self.window.rootViewController = [[MapViewController alloc] init];
     [self.window makeKeyAndVisible];
     return YES;
 }

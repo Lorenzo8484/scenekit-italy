@@ -23,9 +23,7 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Navigatore usa la tua posizione per mostrarti sulla mappa</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Navigatore usa la tua posizione per mostrarti sulla mappa</string>
+    <string>Navigatore usa la tua posizione per mostrarti sulla mappa e navigare</string>
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsArbitraryLoads</key>
@@ -41,11 +39,6 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
-    <key>UIApplicationSceneManifest</key>
-    <dict>
-        <key>UIApplicationSupportsMultipleScreens</key>
-        <false/>
-    </dict>
     <key>UILaunchScreen</key>
     <dict/>
 </dict>
