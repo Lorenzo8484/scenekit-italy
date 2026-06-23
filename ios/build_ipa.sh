@@ -3,7 +3,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
-SRC_DIR="$PROJECT_DIR/navigatore"
+SRC_DIR="$PROJECT_DIR/anavigatore"
 BUILD_DIR="$PROJECT_DIR/build"
 CLANG="/usr/bin/clang-19"
 LLD="/usr/bin/ld64.lld-19"
@@ -11,12 +11,12 @@ LLD="/usr/bin/ld64.lld-19"
 VERSION="${1:-1.0}"
 SDK="${SDK:-/home/alina/sdk/iPhoneOS16.5.sdk}"
 
-echo "🔨 Building Navigatore v$VERSION..."
+echo "🔨 Building aNavigator v$VERSION..."
 echo "   SDK: $SDK"
 
 BUILD_TMP=$(mktemp -d)
 OBJ_DIR="$BUILD_TMP/objects"
-APP_DIR="$BUILD_TMP/Navigatore.app"
+APP_DIR="$BUILD_TMP/aNavigator.app"
 mkdir -p "$OBJ_DIR" "$APP_DIR"
 
 CFLAGS=(
@@ -57,7 +57,7 @@ $LLD -demangle \
   -framework SceneKit \
   -framework ModelIO \
   *.o \
-  -o "$APP_DIR/Navigatore"
+  -o "$APP_DIR/aNavigator"
 
 echo "📱 Creating .app bundle..."
 cp "$SRC_DIR/Info.plist" "$APP_DIR/"
@@ -82,7 +82,7 @@ cp -R "$APP_DIR" "$BUILD_TMP/Payload/"
 cd "$BUILD_TMP"
 python3 <<PYEOF
 import zipfile, os
-ipa_path = "$BUILD_DIR/Navigatore_v$VERSION.ipa"
+ipa_path = "$BUILD_DIR/aNavigator_v$VERSION.ipa"
 with zipfile.ZipFile(ipa_path, 'w', zipfile.ZIP_DEFLATED) as zf:
     for root, dirs, files in os.walk("Payload"):
         for f in files:
@@ -94,5 +94,5 @@ PYEOF
 rm -rf "$BUILD_TMP"
 
 echo "✅ Build completata!"
-echo "   IPA: $BUILD_DIR/Navigatore_v$VERSION.ipa"
-ls -lh "$BUILD_DIR/Navigatore_v$VERSION.ipa"
+echo "   IPA: $BUILD_DIR/aNavigator_v$VERSION.ipa"
+ls -lh "$BUILD_DIR/aNavigator_v$VERSION.ipa"
